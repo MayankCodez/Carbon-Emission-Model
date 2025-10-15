@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon Emission Predictor</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .hidden { display: none; }
+    .auth-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      width: 350px;
+      margin: auto;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+      text-align: center;
+    }
+    .auth-container h3 { margin-bottom: 15px; color: #2e7d32; }
+    .auth-container input {
+      width: 90%;
+      margin: 10px 0;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .auth-container button {
+      width: 95%;
+      padding: 12px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 6px;
+      background: #0984e3;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .auth-container button:hover { background: #74b9ff; }
+    .toggle-text { margin-top: 10px; font-size: 14px; color: #636e72; }
+    .toggle-text span { color: #0984e3; cursor: pointer; font-weight: bold; }
+  </style>
+</head>
+<body>
+ 
+  <nav>
+    <ul class="navbar">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#report">Report Monitoring</a></li>
+      <li><a href="#community">Community Report System</a></li>
+      <li><a href="#login">Login</a></li>
+    </ul>
+  </nav>
+
+  <section id="home" class="section home-section">
+    <img src="images/carbon.png" alt="Carbon Emission" class="top-left-image">
+    <div class="hero-text">
+      <h1>Welcome to Carbon Emission Predictor</h1>
+      <p>Estimate carbon emissions for countries, sectors, and years using AI predictions.</p>
+    </div>
+  </section>
+
+  <section id="about" class="section about-section">
+    <h2>About This Project</h2>
+    <p>
+     Climate change and the rapid increase in carbon emissions have emerged as some of the most pressing challenges facing our planet today. Rising greenhouse gas levels are linked to global warming, extreme weather events, and long-term ecological imbalances, making it essential to track and manage carbon emissions effectively. 
+    </p>
+    <p>
+     Our project, Carbon Emission Predictor, harnesses the power of machine learning and data analytics to provide accurate, reliable, and timely predictions of carbon emissions across various countries, industrial sectors, and time periods. By analyzing historical emission data, the system identifies patterns and trends that help forecast future emissions with high precision.
+    </p>
+    <p>
+      The system combines a robust backend model with a user-friendly, web-based interface. Users can interact with dynamic dashboards, visualize emission trends through interactive graphs, and explore predictive analytics tailored to their specific region or industry. The interface is designed to be intuitive, making complex environmental data accessible not only to policymakers and researchers but also to students, environmental organizations, and the general public.
+    </p>
+    <p>
+      Beyond prediction, the platform aims to support informed decision-making for governments, corporations, and individuals. By understanding potential emission trajectories, stakeholders can implement proactive measures to reduce carbon footprints, design sustainable strategies, and track the impact of policies over time.
+    </p>
+  </section>
+
+  <section id="report" class="section report-section">
+    <h2>Prediction & Analytics</h2>
+    <div class="container">
+      <div class="panel left-panel">
+        <form id="predictionForm">
+          <label>Country:</label>
+          <select id="country" required></select>
+
+          <label>Year:</label>
+          <input type="number" id="year" min="2020" max="2035" placeholder="e.g., 2025" required>
+
+          <label>Month:</label>
+          <input type="number" id="month" min="1" max="12" placeholder="1-12" required>
+
+          <label>Sector:</label>
+          <select id="sector" required></select>
+
+          <button type="submit">Predict</button>
+        </form>
+        <button id="randomBtn" class="btn-random">Predict Random</button>
+        <div id="loading" class="hidden">Calculating...</div>
+      </div>
+
+      <div class="panel right-panel">
+        <div id="result" class="result-card"></div>
+        <canvas id="predictionChart" class="hidden"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section id="community" class="section community-section">
+    <h2>Community Report System</h2>
+    <div class="container">
+      <div class="panel left-panel">
+        <form id="communityForm">
+          <label>Your Name:</label>
+          <input type="text" id="reportName" required>
+
+          <label>Address:</label>
+          <input type="text" id="reportAddress" required>
+
+          <label>Phone:</label>
+          <input type="tel" id="reportPhone" required pattern="[0-9]{10}">
+
+          <label>Email:</label>
+          <input type="email" id="reportEmail" required>
+
+          <label>Industry Name:</label>
+          <input type="text" id="industryName" required>
+
+          <label>Upload Proof (Image/Video):</label>
+          <input type="file" id="proofFile" accept="image/*,video/*" required>
+
+          <button type="submit">Submit Report</button>
+        </form>
+      </div>
+
+      <div class="panel right-panel">
+        <div id="reportResult" class="result-card"></div>
+        <canvas id="reportChart" class="hidden"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section id="login" class="section login-section">
+    <h2>Login Page</h2>
+    <div class="auth-container">
+      <form id="signinForm">
+        <h3>Sign In</h3>
+        <input type="email" id="signinEmail" placeholder="Email" required>
+        <input type="password" id="signinPassword" placeholder="Password" required>
+        <button type="submit">Sign In</button>
+        <p class="toggle-text">Don't have an account? <span onclick="toggleForms()">Sign Up</span></p>
+      </form>
+
+      <form id="signupForm" class="hidden">
+        <h3>Sign Up</h3>
+        <input type="text" id="signupName" placeholder="Full Name" required>
+        <input type="email" id="signupEmail" placeholder="Email" required>
+        <input type="password" id="signupPassword" placeholder="Password" required>
+        <button type="submit">Sign Up</button>
+        <p class="toggle-text">Already have an account? <span onclick="toggleForms()">Sign In</span></p>
+      </form>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+  <script>
+    function toggleForms() {
+      document.getElementById("signinForm").classList.toggle("hidden");
+      document.getElementById("signupForm").classList.toggle("hidden");
+    }
+
+    document.getElementById("signinForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("Signed in successfully!");
+    });
+
+    document.getElementById("signupForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("Account created successfully!");
+    });
+  </script>
+</body>           
+</html>
